@@ -15,8 +15,6 @@ import java.nio.file.*;
 
 public class MergeTerminalPosition_for_HASC {
 
-    // データの場所指定
-    static String data_path = "./data/";
     // 出力データの格納場所
     static String output_path = "./output/";
 
@@ -25,9 +23,13 @@ public class MergeTerminalPosition_for_HASC {
 
         // もし出力フォルダがなければ作成
         String output_terminalPosition = args[args.length-1];
-        File output_dir = new File(output_path+output_terminalPosition+"/");
+        File output_dir = new File(output_path);
         if(output_dir.exists() == false){
             output_dir.mkdir();
+        }
+        File output_terminalPosition_dir = new File(output_dir.getPath()+"/"+output_terminalPosition+"/");
+        if(output_terminalPosition_dir.exists() == false){
+            output_terminalPosition_dir.mkdir();
         }
 
         // 通常のファイル(隠しファイルでない)のみを取り出すフィルタの作成
@@ -51,13 +53,18 @@ public class MergeTerminalPosition_for_HASC {
             System.out.println("========================================================================");
             System.out.println(terminalPosition);
             System.out.println("========================================================================");
-            File data_dir = new File(data_path+terminalPosition+"/");
+            File data_dir = new File(terminalPosition+"/");
 
 
             // data内のファイルを取得
             File[] activity_dirs = data_dir.listFiles(normalFileFilter);
 
-            System.out.println("Activity count = " + activity_dirs.length);
+            try {
+                System.out.println("Activity count = " + activity_dirs.length);
+            } catch(NullPointerException ex){
+                System.out.println("引数がおかしいかも");
+                System.exit(-1);
+            }
 
             // 各行動ディレクトリにアクセス
             for (File activity_dir : activity_dirs){
@@ -82,7 +89,7 @@ public class MergeTerminalPosition_for_HASC {
                             File[] files = person_dir.listFiles(normalFileFilter);
 
                             // 出力ディレクトリに行動ディレクトリを作成
-                            File output_activity_dir = new File(output_dir.getPath()+"/"+activity_dir.getName()+"/");
+                            File output_activity_dir = new File(output_terminalPosition_dir.getPath()+"/"+activity_dir.getName()+"/");
                             if(output_activity_dir.exists() == false){
                                 output_activity_dir.mkdir();
                             }
@@ -108,6 +115,7 @@ public class MergeTerminalPosition_for_HASC {
                                 } catch (FileAlreadyExistsException e){
                                     System.out.println("\tError: ファイルがすでに存在しています!");
                                 } catch (NoSuchFileException e) {
+                                    e.printStackTrace();
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }

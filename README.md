@@ -15,7 +15,7 @@ javac MergeTerminalPosition_for_HASC.java
 java MergeTerminalPosition_for_HASC [端末位置1] [端末位置2] ... [合体後の姿勢名]
 
 ex.
-java MergeTerminalPosition_for_HASC wear;pants;waist;front wear;pants;waist;right-front wear;pants;waist;
+java MergeTerminalPosition_for_HASC data/wear;pants;waist;front data/wear;pants;waist;right-front wear;pants;waist;
 ```
 
 
